@@ -143,7 +143,12 @@ public class RaygunAppender extends AppenderBase<ILoggingEvent>
   private static RaygunErrorMessage buildRaygunMessage(ILoggingEvent loggingEvent)
   {
     final Optional<IThrowableProxy> exception = Optional.fromNullable(loggingEvent.getThrowableProxy());
-    return buildRaygunMessage(loggingEvent.getFormattedMessage(), exception);
+    RaygunErrorMessage error = buildRaygunMessage(loggingEvent.getFormattedMessage(), exception);
+    if (!exception.isPresent())
+    {
+        error.setClassName(loggingEvent.getLoggerName());
+    }
+    return error;
   }
 
   /**
